@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
+
 body{
     margin: 0;
     padding: 0;
@@ -8,7 +10,7 @@ body{
 
 .header-roles {
     width: 100%;
-    height: 120px;
+    height: 100px;
     background-color: var(--dark-blue);
     display: flex;
     justify-content:flex-end;
@@ -18,16 +20,14 @@ body{
 }
 
 .nav-roles {
-    width: 500px;
-    height: 80px;
-    margin-right: 50px;
-    background-color: var(--light-blue);
+    width: 300px;
+    height: 40px;
+    margin-right: 50px !important;
 }
 
 .div-order {
     margin: 0;
-    width: 100%;
-    height: calc(var(--screen-size) - 120px - 100px);
+    height: calc(var(--screen-size) - 100px - 100px);
     display: flex;
     flex-direction: row;
 }
@@ -45,8 +45,9 @@ body{
 }
 
 .header-view-roles {
-    background-color: brown;
     display: flex;
+    padding-bottom: 20px;
+    padding-top: 10px;
 }
 
 .div-title-description {
@@ -60,6 +61,14 @@ body{
 
 }
 
+.container-pagination {
+    background-color: aqua !important;
+}
+
+.bi-plus-lg {
+    margin-right: 8px !important;
+    font-size: 18px;
+}
 
 .div-btn-create {
     width: calc(100% / 2);
@@ -72,15 +81,68 @@ body{
 .btn-create {
     width: 150px;
     margin-right: 100px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: var(--gold);
-    border: none;
+    border-radius: 3px !important;
     transition: background-color 0.5s ease;
 }
 
+.btn-primary {
+    background-color: var(--gold) !important;
+    border: none !important;
+    color: var(--dark-blue) !important;
+    padding: 10px !important;
+}
+
 .btn-create:hover {
-    background-color: var(--light-gold);
+    background-color: var(--light-gold) !important;
+}
+
+.modal-content {
+    background-color: var(--deep-blue) !important; 
+}
+
+.modal-title {
+    color: var(--light-gray) !important;
+}
+
+.form-control {
+    background-color: var(--dark-blue) !important;
+    border: none !important;
+}
+
+.input-custom::placeholder {
+    color: var(--dark-gray) !important;
+}
+
+.form-label {
+    color: var(--light-gray) !important;
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--light-blue) !important;
+}
+
+.modal-footer {
+    border-top: 2px solid var(--light-blue) !important;
+}
+
+.div-view-cards {
+    height: calc(--screen-size - 100px - 100px - 100px) !important;
+    margin: 0 !important; 
+    padding: 15px !important;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto; 
+    gap: 20px; 
+    justify-content: start;
+    align-items: start;
+    background-color: rgb(46, 74, 99);
+}
+
+.card {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .footer-roles {
@@ -88,4 +150,15 @@ body{
     height: 100px;
     background-color: var(--dark-blue);
     border-top: 1px solid var(--light-blue);
+}
+
+.div-icons-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bi-bell, .bi-person-circle, .bi-box-arrow-right{
+    color: aliceblue !important;
+    font-size: 30px;
 }

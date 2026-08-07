@@ -10,7 +10,44 @@
 </head>
 <body>
   <div class="app-shell">
-    <aside class="app-sidebar" id="sidebar-root"></aside>
+
+    <aside class="app-sidebar" id="sidebar-root">
+      <!-- Logo / Brand -->
+      <div class="sidebar-brand">
+        <i class="bi bi-shield-fill-check"></i>
+        <span>Clear Tier</span>
+      </div>
+
+      <!-- Navegación principal -->
+      <nav class="sidebar-nav">
+        <a href="../dashboard.html" class="sidebar-link">
+          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+        </a>
+        
+        <!-- Aquí está el cambio: movimos la clase "active" a Users -->
+        <a href="#" class="sidebar-link active">
+          <i class="bi bi-people-fill"></i> Users
+        </a>
+        
+        <a href="../roles/roles.html" class="sidebar-link">
+          <i class="bi bi-key"></i> Roles
+        </a>
+        <a href="../permissions/permissions.html" class="sidebar-link">
+          <i class="bi bi-shield-lock"></i> Permissions
+        </a>
+        <a href="../audit/audit.html" class="sidebar-link">
+          <i class="bi bi-clock-history"></i> Audit Log
+        </a>
+      </nav>
+
+      <div class="sidebar-section-label">INTELLIGENCE</div>
+      <nav class="sidebar-nav">
+        <a href="../ai-assistant/ai_assistant.html" class="sidebar-link">
+          <i class="bi bi-robot"></i> AI Assistant
+        </a>
+      </nav>
+    </aside>
+
     <div class="app-main">
       <header class="app-navbar" id="navbar-root"></header>
       <main class="app-content">

@@ -1,0 +1,91 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: var(--screen-size);
+}
+
+.header-roles {
+    width: 100%;
+    height: 120px;
+    background-color: var(--dark-blue);
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+    border-bottom: 1px solid var(--light-blue);
+    
+}
+
+.nav-roles {
+    width: 500px;
+    height: 80px;
+    margin-right: 50px;
+    background-color: var(--light-blue);
+}
+
+.div-order {
+    margin: 0;
+    width: 100%;
+    height: calc(var(--screen-size) - 120px - 100px);
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-pc-roles {
+    width: 500px;
+    height: 100%;
+    background-color: var(--deep-blue);
+}
+
+.view-roles {
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-blue);
+}
+
+.header-view-roles {
+    background-color: brown;
+    display: flex;
+}
+
+.div-title-description {
+    width: calc(100% / 2);
+    background-color: rgb(42, 165, 97);
+}
+
+.title-description {
+    color: var(--light-gray);
+    margin-left: 100px;
+
+}
+
+
+.div-btn-create {
+    width: calc(100% / 2);
+    background-color: rgb(91, 42, 165);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.btn-create {
+    width: 150px;
+    margin-right: 100px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--gold);
+    border: none;
+    transition: background-color 0.5s ease;
+}
+
+.btn-create:hover {
+    background-color: var(--light-gold);
+}
+
+.footer-roles {
+    width: 100%;
+    height: 100px;
+    background-color: var(--dark-blue);
+    border-top: 1px solid var(--light-blue);
+}

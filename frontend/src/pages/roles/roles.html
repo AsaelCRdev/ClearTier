@@ -50,7 +50,19 @@
     </aside>
 
     <div class="app-main">
-      <header class="app-navbar" id="navbar-root"></header>
+      <header class="app-navbar" id="navbar-root">
+         <div class="navbar-spacer"></div>
+        <div class="navbar-actions">
+          <button class="icon-btn position-relative" id="notif-bell" title="Notificaciones">
+            <i class="bi bi-bell"></i>
+          <span class="notif-dot"></span>
+          </button>
+          <div class="avatar-circle">A</div>
+          <button class="icon-btn" id="logout-btn" title="Cerrar sesión">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </div>
+      </header>
       <main class="app-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>

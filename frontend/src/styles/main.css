@@ -247,3 +247,168 @@ body {
   color: var(--text-primary) !important;
 }
 .form-control::placeholder { color: var(--text-muted); }
+
+/* Navbar móvil - visible solo en móvil/tablet */
+.mobile-navbar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--bg-sidebar);
+  color: var(--text-primary);
+  padding: 0 1rem;
+  z-index: 1060;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.mobile-navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.mobile-navbar .brand i {
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.mobile-navbar .menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.mobile-navbar .menu-btn:hover {
+  color: var(--accent);
+}
+
+/* Estilos para el offcanvas (sidebar móvil) */
+.offcanvas {
+  background-color: var(--bg-sidebar) !important;
+  color: var(--text-primary) !important;
+  width: 280px !important;
+}
+
+.offcanvas-header {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 1rem 1.25rem !important;
+}
+
+.offcanvas-title {
+  color: var(--text-primary) !important;
+  font-weight: 700;
+}
+
+.offcanvas-title i {
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.offcanvas .btn-close {
+  filter: invert(1) !important;
+  opacity: 0.7;
+}
+
+.offcanvas .btn-close:hover {
+  opacity: 1;
+}
+
+/* Ajustar los enlaces del sidebar dentro del offcanvas */
+.offcanvas .sidebar-link {
+  color: var(--text-muted) !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: var(--radius);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+}
+
+.offcanvas .sidebar-link:hover {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+.offcanvas .sidebar-link.active {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.offcanvas .sidebar-link i {
+  font-size: 1.2rem;
+  width: 24px;
+}
+
+.offcanvas .sidebar-section-label {
+  padding: 1rem 1rem 0.5rem 1rem !important;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* Tablets y móviles (pantallas menores a 992px) */
+@media (max-width: 992px) {
+  /* Ocultar sidebar de escritorio */
+  .app-sidebar {
+    display: none !important;
+  }
+
+  /* Mostrar navbar móvil */
+  .mobile-navbar {
+    display: flex !important;
+  }
+
+  /* Ajustar contenido principal */
+  .app-main {
+    padding-top: 60px;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
+
+  .navbar-spacer {
+    display: none;
+  }
+}
+
+/* Desktop (pantallas mayores a 992px) */
+@media (min-width: 993px) {
+  .mobile-navbar {
+    display: none !important;
+  }
+
+  .app-sidebar {
+    display: flex !important;
+    position: relative;
+    width: 240px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .app-main {
+    padding-top: 0;
+  }
+
+  /* Ocultar el botón de offcanvas en desktop */
+  .offcanvas {
+    display: none !important;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "iam-control-frontend",
+  "version": "1.0.0",
+  "description": "Frontend del Asistente de Configuración de Permisos y Roles (HTML + CSS + TypeScript + Bootstrap)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "typescript": "6.0.3",
+    "vite": "8.2.0"
+  }
+}

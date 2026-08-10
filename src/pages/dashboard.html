@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard: ClearTier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/main.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar" id="sidebar-root"></aside>
+    <div class="app-main">
+      <header class="app-navbar" id="navbar-root"></header>
+      <main class="app-content">
+        <h1 class="h4 mb-1">System Overview</h1>
+        <p style="color:var(--text-muted);" class="mb-4">Current access metrics and system status.</p>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="app-card metric-card">
+              <div class="metric-icon"><i class="bi bi-people-fill"></i></div>
+              <div>
+                <div class="metric-label">Total Users</div>
+                <div class="metric-value" id="metric-total-users">–</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="app-card metric-card">
+              <div class="metric-icon"><i class="bi bi-key-fill"></i></div>
+              <div>
+                <div class="metric-label">Active Roles</div>
+                <div class="metric-value" id="metric-active-roles">–</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="app-card metric-card">
+              <div class="metric-icon"><i class="bi bi-shield-fill"></i></div>
+              <div>
+                <div class="metric-label">Permissions</div>
+                <div class="metric-value" id="metric-permissions">–</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="app-card metric-card">
+              <div class="metric-icon" style="color:var(--accent);"><i class="bi bi-clock-history"></i></div>
+              <div>
+                <div class="metric-label">Recent Changes (24h)</div>
+                <div class="metric-value" style="color:var(--accent);" id="metric-recent-changes">–</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="../ts/pages-init/dashboard.init.ts"></script>
+</body>
+</html>

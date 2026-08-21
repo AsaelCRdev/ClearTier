@@ -55,6 +55,41 @@
             </div>
           </div>
         </div>
+        <div class="app-card mb-4" style="border: 1px solid rgba(255,255,255,0.05); border-radius: 0.5rem; overflow: hidden;">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3 border-bottom" style="border-color: rgba(255,255,255,0.05) !important;">
+            <h5 class="mb-3 mb-md-0 fw-bold text-white">
+              <i class="bi bi-graph-up me-2" style="color: var(--accent, #f5a623);"></i>Crecimiento de usuarios
+            </h5>
+            <div>
+              <input type="radio" class="btn-check" name="chartFilter" id="filter-24h" autocomplete="off" checked>
+
+              <label class="btn btn-outline-warning px-3" 
+              style="--bs-btn-color: #f5a623;
+               --bs-btn-border-color: #f5a623; --bs-btn-hover-bg: #f5a623; 
+               --bs-btn-hover-border-color: #f5a623; 
+               --bs-btn-active-bg: #f5a623;
+               --bs-btn-active-border-color: #f5a623;"
+                for="filter-24h">Últimas 24 Horas</label>
+
+              <input type="radio" class="btn-check" name="chartFilter" id="filter-year" autocomplete="off">
+
+              <label class="btn btn-outline-warning px-3" 
+              style="--bs-btn-color: #f5a623; 
+              --bs-btn-border-color: #f5a623;
+               --bs-btn-hover-bg: #f5a623; 
+               --bs-btn-hover-border-color: #f5a623; 
+               --bs-btn-active-bg: #f5a623; 
+               --bs-btn-active-border-color: #f5a623;" 
+               for="filter-year">Año Completo</label>
+            </div>
+          </div>
+
+          <div class="card-body p-3">
+            <div style="height: 50vh; width: 100%;">
+              <canvas id="usersEvolutionChart"></canvas>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>

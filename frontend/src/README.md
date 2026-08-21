@@ -1,4 +1,4 @@
-# ClearTier — Frontend (HTML + CSS + TypeScript + Bootstrap)
+# IAM Control — Frontend (HTML + CSS + TypeScript + Bootstrap)
 
 Frontend del "Asistente de Configuración de Permisos y Roles". Corre 100% en el navegador con un **mock backend en memoria** (ver `src/ts/api/mockBackend.ts`) — no necesitas Java, PostgreSQL ni una API key de Gemini para probarlo.
 

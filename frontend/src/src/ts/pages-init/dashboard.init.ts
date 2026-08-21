@@ -5,16 +5,177 @@ import { fetchUsers } from '../api/userApi';
 import { fetchRoles } from '../api/roleApi';
 import { fetchPermissionMatrix } from '../api/permissionApi';
 import { fetchAuditLogs } from '../api/auditApi';
+import { Chart, ChartConfiguration, registerables, TimeScaleOptions } from 'chart.js';
+import 'chartjs-adapter-date-fns';
 
-// 1) Guard de ruta: si no hay sesión, esto redirige y detiene el resto del script.
+
+
+//si no hay sesión, esto redirige y detiene el resto del script.
 const session = requireAuth();
 
-// 2) Layout común: sidebar marcando "dashboard" como activo, navbar con iniciales del usuario.
+//Layout mostrando como marcado el das dashboard
 renderSidebar('sidebar-root', 'dashboard');
 renderNavbar('navbar-root', { userInitial: session.userFullName.charAt(0), hasNotifications: true });
 
-// 3) Carga de métricas — Promise.all para pedir todo en paralelo en vez de
-// esperar cada fetch uno detrás de otro (más rápido para el usuario).
+//para habilitar globalmente los componentes de la libreria
+Chart.register(...registerables);
+
+//ajustes golbales de estilo(debo ver si cambio lo posible del css en linea al main.css)
+Chart.defaults.color = 'rgba(255, 255, 255, 0.6)';
+Chart.defaults.font.family = 'system-ui, -apple-system, sans-serif';
+
+let evolutionChart: Chart | null = null;
+let currentTotalUsers = 0;
+
+const mainColor = '#f5a623';
+const darkBg = '#1e232b';
+
+function generateChartData(totalUsuariosFinal: number, mode: '24h' | 'year'): { x: number; y: number }[] {
+  const data: { x: number; y: number }[] = [];
+  const now = new Date();
+
+  if (mode === '24h') {
+    let accumulated = totalUsuariosFinal * 0.90;
+    const step = (totalUsuariosFinal - accumulated) / 23;
+
+    for (let i = 23; i >= 0; i--) {
+      const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+      if (i === 0) {
+        data.push({ x: time.getTime(), y: totalUsuariosFinal });
+      } else {
+        accumulated += step + (Math.random() * step * 0.4 - step * 0.2);
+        data.push({ x: time.getTime(), y: Math.floor(accumulated) });
+      }
+    }
+  } else {
+    const currentYear = now.getFullYear();
+    const baseline = totalUsuariosFinal * 0.40;
+    
+    for (let i = 0; i < 12; i++) {
+      const time = new Date(currentYear, i, 1);
+      const progress = i / 11;
+      const yValue = i === 11 
+        ? totalUsuariosFinal 
+        : Math.round(baseline + (totalUsuariosFinal - baseline) * progress);
+      data.push({ x: time.getTime(), y: yValue });
+    }
+  }
+  return data;
+}
+
+function initChart(totalUsuariosFinal: number): void {
+  currentTotalUsers = totalUsuariosFinal;
+  const canvas = document.getElementById('usersEvolutionChart') as HTMLCanvasElement;
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const initialData = generateChartData(totalUsuariosFinal, '24h');
+
+  // Gradiente para el fondo oscuro
+  const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+  gradient.addColorStop(0, 'rgba(245, 166, 35, 0.3)'); 
+  gradient.addColorStop(1, 'rgba(245, 166, 35, 0.0)');
+
+  const config: ChartConfiguration = {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Usuarios Registrados',
+        data: initialData,
+        borderColor: mainColor,
+        backgroundColor: gradient,
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: darkBg,
+        pointBorderColor: mainColor,
+        pointBorderWidth: 2,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: mainColor,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          padding: 12,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: mainColor,
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleFont: { size: 13 },
+          bodyFont: { size: 14, weight: 'bold' }
+        }
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            unit: 'hour',
+            displayFormats: { hour: 'HH:mm', month: 'MMM yyyy' }
+          },
+          grid: { 
+            color: 'rgba(255, 255, 255, 0.05)',
+            tickLength: 0
+          },
+          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }
+        },
+        y: {
+          beginAtZero: false,
+          grid: { 
+            color: 'rgba(255, 255, 255, 0.05)',
+            tickLength: 0 
+          },
+          border: { 
+            display: false,
+             dash: [5, 5]
+          }
+        }
+      },
+      interaction: { mode: 'nearest', axis: 'x', intersect: false }
+    }
+  };
+
+  evolutionChart = new Chart(ctx, config);
+}
+
+function setupChartInteractions(): void {
+  const btn24h = document.getElementById('filter-24h') as HTMLInputElement;
+  const btnYear = document.getElementById('filter-year') as HTMLInputElement;
+
+  btn24h?.addEventListener('change', () => {
+    if (!evolutionChart) return;
+    evolutionChart.data.datasets[0].data = generateChartData(currentTotalUsers, '24h');
+
+    const xScale = evolutionChart.options.scales?.x as TimeScaleOptions | undefined;
+    if (xScale?.time) {
+     xScale.time.unit = 'hour';
+    }
+
+    evolutionChart.update();
+  });
+
+  btnYear?.addEventListener('change', () => {
+    if (!evolutionChart) return;
+    evolutionChart.data.datasets[0].data = generateChartData(currentTotalUsers, 'year');
+
+    const xScale = evolutionChart.options.scales?.x as TimeScaleOptions | undefined;
+    if (xScale?.time) {
+     xScale.time.unit ='month';
+    }
+    evolutionChart.update();
+  });
+}
+
+// Carga de métricas usando Promise.all para pedir todo en paralelo en vez de hacer que espere a los fecth uno detras de otro
 async function loadMetrics() {
   const [users, roles, matrix, logs] = await Promise.all([
     fetchUsers(),
@@ -23,9 +184,7 @@ async function loadMetrics() {
     fetchAuditLogs(),
   ]);
 
-  // Nota didáctica: `roles[].usersCount` representa la población total simulada
-  // de la empresa (para que el dashboard se vea realista, como en el diseño original),
-  // mientras que `users` es la lista editable de usuarios que ves en la pantalla Users.
+  
   void users;
   const totalUsers = roles.reduce((sum, r) => sum + r.usersCount, 0);
   document.getElementById('metric-total-users')!.textContent = totalUsers.toLocaleString('en-US');
@@ -38,6 +197,9 @@ async function loadMetrics() {
   const since = Date.now() - 24 * 60 * 60 * 1000;
   const recentChanges = logs.filter((log) => new Date(log.timestamp).getTime() >= since).length;
   document.getElementById('metric-recent-changes')!.textContent = String(recentChanges || logs.length);
+
+  initChart(totalUsers);
+  setupChartInteractions();
 }
 
 loadMetrics();

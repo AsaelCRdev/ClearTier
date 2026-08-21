@@ -26,7 +26,7 @@ export function renderSidebar(containerId: string, activePage: PageKey): void {
   container.innerHTML = `
     <div class="sidebar-brand">
       <i class="bi bi-shield-fill-check"></i>
-      <span>IAM Control</span>
+      <span>ClearTier</span>
     </div>
     <nav class="sidebar-nav">
       ${NAV_ITEMS.map(renderItem).join('')}

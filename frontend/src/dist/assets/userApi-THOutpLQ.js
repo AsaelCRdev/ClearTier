@@ -1,1 +1,0 @@
-import{a as e,b as t,f as n,v as r}from"./tokenStorage-DVhbB3ZF.js";async function i(){return t(r())}async function a(r){return n(r.email)?t(null).then(()=>{throw Error(`El correo ya está registrado`)}):t(e(r))}export{i as n,a as t};

@@ -1,1 +1,0 @@
-import{_ as e,b as t,d as n,i as r,o as i}from"./tokenStorage-DVhbB3ZF.js";async function a(){return t(e())}async function o(e){let i=e.name.trim();if(i.length<3||i.length>20)throw Error(`El nombre debe tener entre 3 y 20 caracteres`);if(n(i))throw Error(`El nombre del rol ya está en uso`);return t(r({...e,name:i}))}async function s(e){return t(i(e))}export{o as n,a as r,s as t};

@@ -9,11 +9,25 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+<<<<<<< HEAD
+=======
+
+/*
+    Datos que se llaman desde la base de datos para
+    la vista pública del cliente en la pantalla.
+    (Se usa DTO por tema de seguridad porque
+    si se accede a la entidad de golpe es una mala
+    práctica)
+*/
+>>>>>>> feature/cristian
 public class RolResponseDTO {
 
     private String name;
     private String description;
     private Boolean isSystemRol;
+<<<<<<< HEAD
     private int usersCount;
+=======
+>>>>>>> feature/cristian
 
 }

@@ -34,7 +34,10 @@ public class RolMapper {
                     .name(rolEntity.getName())
                     .description(rolEntity.getDescription())
                     .isSystemRol(rolEntity.getIsSystemRol())
+<<<<<<< HEAD
                     //.usersCount(rolEntity.getUsersCount()) para hacer esta parte se necesita tener Users registrados
+=======
+>>>>>>> feature/cristian
                     .build();
         }
     }

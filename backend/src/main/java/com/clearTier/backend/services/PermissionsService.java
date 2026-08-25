@@ -1,5 +1,9 @@
 package com.clearTier.backend.services;
 
+<<<<<<< HEAD
+=======
+import com.clearTier.backend.contracts.IPermissionsService;
+>>>>>>> feature/cristian
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;
 import com.clearTier.backend.entities.PermissionsEntity;
@@ -13,7 +17,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+<<<<<<< HEAD
 public class PermissionsService implements IPermissionsService{
+=======
+public class PermissionsService implements IPermissionsService {
+>>>>>>> feature/cristian
 
     private final IPermissionsRepository permissionsRepository;
     private final PermissionsMapper permissionsMapper;

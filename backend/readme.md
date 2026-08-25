@@ -1,6 +1,8 @@
 # ClearTier Backend
 
-Backend del proyecto ClearTier construido con **Spring Boot**, **Spring Security**, **Spring Data JPA** y **PostgreSQL**.
+Backend del proyecto ClearTier construido con 
+**Spring Boot**, **Spring Security**, **Spring Data JPA** 
+y **PostgreSQL**.
 
 ---
 

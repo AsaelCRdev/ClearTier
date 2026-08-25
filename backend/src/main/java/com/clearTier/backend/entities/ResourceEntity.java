@@ -11,26 +11,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ROLES")
-
+@Table(name = "RESOURCES")
 /*
     Esta entidad la tiene que unir Adriangel
-    a las clases User, aiChangeItems y
-    rolePermission (Foreign Key)
+    remplazando el Enum de permissions por
+    esta clase (Foreign Key).
  */
-public class RolEntity {
+public class ResourceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String nameResource;
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "isSystemRol")
-    private Boolean isSystemRol;
-
+    @Column(name = "description", nullable = false)
+    private String descriptionResource;
 }

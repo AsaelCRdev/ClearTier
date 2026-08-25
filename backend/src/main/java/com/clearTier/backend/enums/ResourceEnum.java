@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+//Enum de prueba
 @Getter
 @AllArgsConstructor
 public enum ResourceEnum {

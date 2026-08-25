@@ -1,4 +1,4 @@
-package com.clearTier.backend.services;
+package com.clearTier.backend.contracts;
 
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;

@@ -1,5 +1,6 @@
 package com.clearTier.backend.services;
 
+import com.clearTier.backend.contracts.IRolService;
 import com.clearTier.backend.dto.request.RolRequestDTO;
 import com.clearTier.backend.dto.client.RolResponseDTO;
 import com.clearTier.backend.entities.RolEntity;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class RolService implements IRolService{
+public class RolService implements IRolService {
 
     private final IRolRepository rolRepository;
     private final RolMapper rolMapper;

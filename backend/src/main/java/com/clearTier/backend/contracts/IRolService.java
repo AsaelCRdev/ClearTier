@@ -1,4 +1,4 @@
-package com.clearTier.backend.services;
+package com.clearTier.backend.contracts;
 
 import com.clearTier.backend.dto.request.RolRequestDTO;
 import com.clearTier.backend.dto.client.RolResponseDTO;
@@ -9,6 +9,5 @@ public interface IRolService {
 
     RolResponseDTO createRol(RolRequestDTO rolRequestDTO);
     List<RolResponseDTO> getAllRol();
-    //int countUsers();
 
 }

@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
     pantalla para convertirlos en entidad.
     (Las anotaciones simplifican las validaciones)
 */
-public class RolRequestDTO {
+public class ResourceRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 3, max = 100, message = "debe tener entre 3 a 100 caracteres")
-    private String name;
+    private String nameResource;
 
     @NotBlank(message = "La descripción es obligatoria")
-    @Size(min = 3, max = 1000, message = "debe tener entre 3 a 100 caracteres")
-    private String description;
+    @Size(min = 3, max = 100, message = "debe tener entre 3 a 100 caracteres")
+    private String descriptionResource;
 }

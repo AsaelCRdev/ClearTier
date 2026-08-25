@@ -11,15 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-<<<<<<< HEAD
-=======
 
 /*
     Datos que ingresa el cliente en la
     pantalla para convertirlos en entidad.
     (Las anotaciones simplifican las validaciones)
 */
->>>>>>> feature/cristian
 public class RolRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -27,10 +24,6 @@ public class RolRequestDTO {
     private String name;
 
     @NotBlank(message = "La descripción es obligatoria")
-<<<<<<< HEAD
-    @Size(min = 3, max = 100, message = "debe tener entre 3 a 100 caracteres")
-=======
     @Size(min = 3, max = 1000, message = "debe tener entre 3 a 100 caracteres")
->>>>>>> feature/cristian
     private String description;
 }

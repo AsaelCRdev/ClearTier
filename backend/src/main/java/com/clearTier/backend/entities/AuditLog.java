@@ -28,7 +28,7 @@ public class AuditLog{
     @Column(name = "target_type", nullable = false, length = 50)
     private String targetType;
 
-    @Column(name="actor_id")
+    @Column(name="target_id")
     private Integer targetId;
 
     @Column(name = "created_at", nullable = false, updatable = false)

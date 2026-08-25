@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-<<<<<<< HEAD
-=======
 
 /*
     Datos que se llaman desde la base de datos para
@@ -19,15 +17,10 @@ import lombok.NoArgsConstructor;
     si se accede a la entidad de golpe es una mala
     práctica)
 */
->>>>>>> feature/cristian
 public class RolResponseDTO {
 
     private String name;
     private String description;
     private Boolean isSystemRol;
-<<<<<<< HEAD
-    private int usersCount;
-=======
->>>>>>> feature/cristian
 
 }

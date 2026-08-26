@@ -11,17 +11,15 @@ export function delay<T>(value: T, ms = 350): Promise<T> {
    por Vite  para no hardcodear la URL en el código.Todavía NO se usa en este esqueleto, 
    pero queda lista para el día que reemplaces mockBackend.ts por llamadas reales.
 */
-export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? 'http://localhost:8080/api';
+export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? 'http://localhost:8081/api';
 
 /* Wrapper de fetch que centraliza: adjuntar el JWT, parsear JSON y 
   convertir respuestas de error HTTP en excepciones legibles.*/
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem('iam_token');
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   });

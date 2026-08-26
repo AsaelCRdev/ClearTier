@@ -20,7 +20,7 @@ public class RolMapper {
             return RolEntity.builder()
                     .name(rolRequestDTO.getName())
                     .description(rolRequestDTO.getDescription())
-                    .isSystemRol(true)
+                    .isSystemRol(false)
                     .build();
         }
     }
@@ -31,6 +31,7 @@ public class RolMapper {
             return null;
         }else {
             return RolResponseDTO.builder()
+                    .id(rolEntity.getId())
                     .name(rolEntity.getName())
                     .description(rolEntity.getDescription())
                     .isSystemRol(rolEntity.getIsSystemRol())

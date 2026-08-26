@@ -247,3 +247,25 @@ body {
   color: var(--text-primary) !important;
 }
 .form-control::placeholder { color: var(--text-muted); }
+
+/* Matriz de permisos: composición compacta como la vista de referencia. */
+.permissions-page .app-sidebar { width: 178px; padding: 1rem 0.55rem; }
+.permissions-page .sidebar-brand { padding-bottom: 1.25rem; font-size: 0.78rem; }
+.permissions-page .sidebar-link { padding: 0.45rem 0.55rem; font-size: 0.75rem; }
+.permissions-page .sidebar-section-label { margin: 1rem 0.55rem 0.35rem; font-size: 0.62rem; }
+.permissions-page .app-navbar { height: 44px; padding: 0 1rem; }
+.permissions-page .app-content { padding: 1.35rem 1.25rem; }
+.permissions-page .permissions-heading h1 { font-size: 1.1rem; font-weight: 700; }
+.permissions-page .permissions-heading p { font-size: 0.72rem !important; }
+.permissions-page .permissions-tabs { padding: 0; background: transparent; border: 0; }
+.permissions-page .permissions-tabs button { border-radius: 999px; padding: 0.35rem 0.8rem; font-size: 0.72rem; }
+.permissions-page .permissions-table-shell { background: #0c192b; border-color: #17304d; border-radius: 5px; }
+.permissions-page .app-table th { background: #0a1524; color: #b9c5d5; padding: 0.7rem 0.85rem; font-size: 0.78rem; text-align: center; }
+.permissions-page .app-table th:first-child { text-align: left; width: 185px; }
+.permissions-page .app-table td { padding: 0.7rem 0.85rem; border-color: #17304d; text-align: center; font-size: 0.78rem; }
+.permissions-page .app-table td:first-child { text-align: left; color: #f2f5f8; }
+.permissions-page .app-table tr:nth-child(even) td { background: rgba(20, 47, 72, 0.32); }
+.permissions-page .matrix-cell-btn { min-width: 65px; padding: 0.28rem 0.65rem; border-radius: 999px; font-size: 0.66rem; background: transparent; }
+.permissions-page .matrix-cell-btn.effect-allow { background: rgba(0, 190, 108, 0.12); }
+.permissions-page .matrix-cell-btn.effect-deny { background: rgba(224, 85, 79, 0.12); }
+.permissions-page .matrix-cell-btn.effect-unset { border-color: transparent; }

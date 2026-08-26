@@ -2,7 +2,8 @@
 export interface Resource {
   id: string;
   name: string;
-  label: string; // nombre legible para la UI, es decir el recurso
+  label: string;
+  description: string;
 }
 
 /* Efecto de una celda de la matriz. "UNSET" significa que no hay una regla

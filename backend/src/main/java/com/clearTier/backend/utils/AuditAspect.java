@@ -43,10 +43,8 @@ public class AuditAspect {
         String targetType = captureAction.targetType();
 
     
-        Integer targetId = evaluarTargetIdDinamico(joinPoint, captureAction.targetIdSpEL());
-
-        
-        Object resultado = joinPoint.proceed(); 
+        Object resultado = joinPoint.proceed();
+        Integer targetId = evaluarTargetIdDinamico(joinPoint, captureAction.targetIdSpEL(), resultado);
 
         AuditLog log = AuditLog.builder()
         .actorId(actorId)
@@ -60,7 +58,7 @@ public class AuditAspect {
         return resultado;
     }
 
-     private Integer evaluarTargetIdDinamico(ProceedingJoinPoint joinPoint, String expressionStr) {
+    private Integer evaluarTargetIdDinamico(ProceedingJoinPoint joinPoint, String expressionStr, Object resultado) {
         if (expressionStr == null || expressionStr.isEmpty()) {
             return null;
         }
@@ -70,11 +68,13 @@ public class AuditAspect {
             Object[] args = joinPoint.getArgs();
 
             StandardEvaluationContext context = new StandardEvaluationContext();
+            context.setVariable("result", resultado);
             for (int i = 0; i < parameterNames.length; i++) {
                 context.setVariable(parameterNames[i], args[i]);
             }
 
-            return parser.parseExpression(expressionStr).getValue(context, Integer.class);
+            Number value = parser.parseExpression(expressionStr).getValue(context, Number.class);
+            return value == null ? null : value.intValue();
         } catch (Exception e) {
             System.err.println("Error al procesar el targetId de auditoría: " + e.getMessage());
             return null;

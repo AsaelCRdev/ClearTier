@@ -1,0 +1,1 @@
+import{i as e}from"./tokenStorage-CrOxvkFu.js";async function t(){return(await e(`/audit?page=0&size=100`)).content.map(e=>({id:String(e.id),timestamp:e.createdAt,actor:e.actorId===null?`Sistema`:String(e.actorId),action:e.action,target:e.targetType}))}export{t};

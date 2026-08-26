@@ -6,6 +6,7 @@ import com.clearTier.backend.dto.client.RolResponseDTO;
 import com.clearTier.backend.entities.RolEntity;
 import com.clearTier.backend.mappers.RolMapper;
 import com.clearTier.backend.repository.IRolRepository;
+import com.clearTier.backend.utils.CaptureAction;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class RolService implements IRolService {
     }
 
     @Override
+    @CaptureAction(action = "CREATE_ROLE", targetType = "ROLE", targetIdSpEL = "#result.id")
     public RolResponseDTO createRol(RolRequestDTO rolRequestDTO) {
         RolEntity rolEntity = rolMapper.toEntity(rolRequestDTO);
         RolEntity save= rolRepository.save(rolEntity);

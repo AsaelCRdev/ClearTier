@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4200"})
 public class AutomationController {
 
     private final AutomationService automationService;

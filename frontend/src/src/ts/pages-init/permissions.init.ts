@@ -52,7 +52,11 @@ function renderTable(): void {
     .map((resource) => {
       const cells = visibleRoles
         .map((role) => {
-          const cell = matrix.find((c) => c.roleId === role.id && c.resourceId === resource.id)!;
+          const cell = matrix.find((c) => c.roleId === role.id && c.resourceId === resource.id) ?? {
+            roleId: role.id,
+            resourceId: resource.id,
+            effect: 'UNSET' as PermissionEffect,
+          };
           const disabled = role.isSystemRole;
           return `<td>
             <button class="matrix-cell-btn ${effectClass(cell.effect)}"
@@ -71,7 +75,8 @@ function renderTable(): void {
     btn.addEventListener('click', async () => {
       const roleId = btn.dataset.roleId!;
       const resourceId = btn.dataset.resourceId!;
-      const newEffect = await toggleCell(roleId, resourceId);
+      try {
+        const newEffect = await toggleCell(roleId, resourceId);
       // Actualiza solo esa celda en memoria y su botón en el DOM — evita
       // volver a pedir toda la matriz al servidor por un solo clic.
       const cell = matrix.find((c) => c.roleId === roleId && c.resourceId === resourceId)!;
@@ -79,6 +84,9 @@ function renderTable(): void {
       btn.textContent = newEffect;
       btn.className = `matrix-cell-btn ${effectClass(newEffect)}`;
       showToast(`Permiso actualizado a ${newEffect}`, 'success');
+      } catch (error) {
+        showToast(error instanceof Error ? error.message : 'No se pudo actualizar el permiso', 'error');
+      }
     });
   });
 }

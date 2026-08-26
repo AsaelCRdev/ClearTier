@@ -1,15 +1,11 @@
-import { delay } from './apiClient';
-import { dbGetAiQuota, dbConsumeAiQuota, dbCreateAiDraft, dbCommitAiDraft, dbRejectAiDraft, dbGetResources } from './mockBackend';
+import { apiFetch } from './apiClient';
 import type { AiChangeRequest, AiChangeItem } from '../models/aiChange.model';
 
-const MAX_PROMPT_LENGTH = 4000; // Restricción exacta de la Historia "Automatización de tareas"
-
-// Palabras que delimitan el alcance del asistente (regla de negocio / RNF 2.5.3):
-// si el prompt no contiene ninguna de ellas, se considera fuera de alcance.
-const IN_SCOPE_KEYWORDS = ['rol', 'permiso', 'acceso', 'usuario', 'dashboard', 'auditoria', 'auditoría', 'ver', 'bloquea', 'bloquear', 'edicion', 'edición', 'denie', 'niega'];
+const MAX_PROMPT_LENGTH = 4000;
+let lastAiType: 'role' | 'permission' = 'role';
 
 export async function fetchAiQuota() {
-  return delay(dbGetAiQuota());
+  return { used: 0, limit: 1500 };
 }
 
 /**
@@ -33,50 +29,40 @@ export async function interpretPrompt(promptText: string): Promise<{ outOfScope:
     throw new Error(`La instrucción supera el máximo de ${MAX_PROMPT_LENGTH} caracteres`);
   }
 
-  const hasQuota = dbConsumeAiQuota();
-  if (!hasQuota) {
-    throw new Error('Se alcanzó el límite diario de solicitudes a la IA (1500/día). Intenta de nuevo mañana.');
-  }
+  const type = /permiso|permission|acceso/i.test(promptText) ? 'permission' : 'role';
+  lastAiType = type;
+  const preview = await apiFetch<Record<string, unknown>>(`/chat?type=${type}`, {
+    method: 'POST',
+    body: JSON.stringify({ message: promptText }),
+  });
+  if (!preview.preview) return { outOfScope: true };
 
-  const lower = promptText.toLowerCase();
-  const isInScope = IN_SCOPE_KEYWORDS.some((kw) => lower.includes(kw));
-  if (!isInScope) {
-    return delay({ outOfScope: true });
-  }
-
-  // Extrae un nombre de rol si el prompt lo menciona entre comillas o tras "rol para/de".
-  const quotedMatch = promptText.match(/"([^"]+)"/);
-  const roleNameMatch = promptText.match(/rol (?:para|de)\s+([a-záéíóúñ\s]+?)(?:que|para|,|\.|$)/i);
-  const roleName = quotedMatch?.[1] ?? (roleNameMatch?.[1]?.trim() ? capitalize(roleNameMatch[1].trim()) : 'Nuevo Rol (IA)');
-
-  const resources = dbGetResources();
-  const items: AiChangeItem[] = [{ operation: 'ADD_ROLE', label: `ROLE "${roleName}"` }];
-
-  for (const resource of resources) {
-    if (lower.includes(resource.name) || lower.includes(resource.label.toLowerCase())) {
-      const denied = /bloquea|bloquear|niega|denegado|no pued[ae]/i.test(lower);
-      items.push({ operation: denied ? 'DENY' : 'ALLOW', label: `${resource.name}:view` });
-    }
-  }
-  if (items.length === 1) {
-    // Si no se detectó ningún recurso mencionado, se asume una vista mínima.
-    items.push({ operation: 'ALLOW', label: 'dashboard:view' });
-  }
-
-  const request = dbCreateAiDraft(promptText, items);
-  return delay({ outOfScope: false, request });
+  const draft = preview.preview as Record<string, unknown>;
+  const items: AiChangeItem[] = type === 'role'
+    ? [{ operation: 'ADD_ROLE', label: `ROLE "${draft.name ?? ''}"` }]
+    : [{ operation: 'ALLOW', label: `${draft.resource ?? ''}:${draft.action ?? ''}` }];
+  return { outOfScope: false, request: {
+    id: crypto.randomUUID(),
+    promptText,
+    status: 'DRAFT',
+    items,
+    createdAt: new Date().toISOString(),
+  }, type };
 }
 
 export async function commitAiChanges(requestId: string): Promise<void> {
-  dbCommitAiDraft(requestId);
-  return delay(undefined);
+  void requestId;
+  await apiFetch(`/chat?type=${lastAiType}`, {
+    method: 'POST',
+    body: JSON.stringify({ message: 'si, confirmar' }),
+  });
 }
 
 export async function discardAiChanges(requestId: string): Promise<void> {
-  dbRejectAiDraft(requestId);
-  return delay(undefined);
+  void requestId;
+  await apiFetch(`/chat?type=${lastAiType}`, {
+    method: 'POST',
+    body: JSON.stringify({ message: 'no, cancelar' }),
+  });
 }
 
-function capitalize(text: string): string {
-  return text.replace(/\b\w/g, (c) => c.toUpperCase());
-}

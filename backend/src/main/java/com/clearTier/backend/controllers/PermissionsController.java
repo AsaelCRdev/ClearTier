@@ -3,16 +3,17 @@ package com.clearTier.backend.controllers;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.services.PermissionsService;
+import com.clearTier.backend.dto.client.PermissionMatrixCellDTO;
+import com.clearTier.backend.entities.RolePermissionEntity;
 
 import jakarta.validation.Valid;
-import com.clearTier.backend.utils.CaptureAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4200"})
 public class PermissionsController {
 
     private final PermissionsService permissionsService;
@@ -22,11 +23,6 @@ public class PermissionsController {
     }
 
     @PostMapping("/permissions")
-    @CaptureAction(
-        action = "CREATE_PERMISSION", 
-        targetType = "PERMISSION", 
-        targetIdSpEL = "#nuevo.id"
-    )
     public ResponseEntity<?> crear(@Valid @RequestBody PermissionsRequestDTO permissionsRequestDTO) {
         try {
             PermissionsResponseDTO nuevo = permissionsService.createPermission(permissionsRequestDTO);
@@ -45,5 +41,18 @@ public class PermissionsController {
         }catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/permissions/matrix")
+    public ResponseEntity<java.util.List<PermissionMatrixCellDTO>> matrix() {
+        return ResponseEntity.ok(permissionsService.getPermissionMatrix());
+    }
+
+    @PutMapping("/permissions/matrix/{roleName}/{resourceName}")
+    public ResponseEntity<PermissionMatrixCellDTO> toggle(
+            @PathVariable String roleName, @PathVariable String resourceName) {
+        RolePermissionEntity assignment = permissionsService.togglePermission(roleName, resourceName);
+        return ResponseEntity.ok(new PermissionMatrixCellDTO(
+                roleName, resourceName, assignment.getEffect()));
     }
 }

@@ -25,53 +25,46 @@ Chart.defaults.color = 'rgba(255, 255, 255, 0.6)';
 Chart.defaults.font.family = 'system-ui, -apple-system, sans-serif';
 
 let evolutionChart: Chart | null = null;
-let currentTotalUsers = 0;
+let currentAuditLogs: { timestamp: string }[] = [];
 
 const mainColor = '#f5a623';
 const darkBg = '#1e232b';
 
-function generateChartData(totalUsuariosFinal: number, mode: '24h' | 'year'): { x: number; y: number }[] {
+function generateChartData(logs: { timestamp: string }[], mode: '24h' | 'year'): { x: number; y: number }[] {
   const data: { x: number; y: number }[] = [];
   const now = new Date();
 
   if (mode === '24h') {
-    let accumulated = totalUsuariosFinal * 0.90;
-    const step = (totalUsuariosFinal - accumulated) / 23;
-
     for (let i = 23; i >= 0; i--) {
       const time = new Date(now.getTime() - i * 60 * 60 * 1000);
-      if (i === 0) {
-        data.push({ x: time.getTime(), y: totalUsuariosFinal });
-      } else {
-        accumulated += step + (Math.random() * step * 0.4 - step * 0.2);
-        data.push({ x: time.getTime(), y: Math.floor(accumulated) });
-      }
+      const start = time.getTime();
+      const end = start + 60 * 60 * 1000;
+      data.push({ x: start, y: logs.filter((log) => {
+        const timestamp = new Date(log.timestamp).getTime();
+        return timestamp >= start && timestamp < end;
+      }).length });
     }
   } else {
     const currentYear = now.getFullYear();
-    const baseline = totalUsuariosFinal * 0.40;
-    
     for (let i = 0; i < 12; i++) {
       const time = new Date(currentYear, i, 1);
-      const progress = i / 11;
-      const yValue = i === 11 
-        ? totalUsuariosFinal 
-        : Math.round(baseline + (totalUsuariosFinal - baseline) * progress);
-      data.push({ x: time.getTime(), y: yValue });
+      data.push({ x: time.getTime(), y: logs.filter((log) => {
+        const timestamp = new Date(log.timestamp);
+        return timestamp.getFullYear() === currentYear && timestamp.getMonth() === i;
+      }).length });
     }
   }
   return data;
 }
 
-function initChart(totalUsuariosFinal: number): void {
-  currentTotalUsers = totalUsuariosFinal;
+function initChart(logs: { timestamp: string }[]): void {
   const canvas = document.getElementById('usersEvolutionChart') as HTMLCanvasElement;
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const initialData = generateChartData(totalUsuariosFinal, '24h');
+  const initialData = generateChartData(logs, '24h');
 
   // Gradiente para el fondo oscuro
   const gradient = ctx.createLinearGradient(0, 0, 0, 320);
@@ -82,7 +75,7 @@ function initChart(totalUsuariosFinal: number): void {
     type: 'line',
     data: {
       datasets: [{
-        label: 'Usuarios Registrados',
+        label: 'Acciones realizadas',
         data: initialData,
         borderColor: mainColor,
         backgroundColor: gradient,
@@ -153,7 +146,7 @@ function setupChartInteractions(): void {
 
   btn24h?.addEventListener('change', () => {
     if (!evolutionChart) return;
-    evolutionChart.data.datasets[0].data = generateChartData(currentTotalUsers, '24h');
+    evolutionChart.data.datasets[0].data = generateChartData(currentAuditLogs, '24h');
 
     const xScale = evolutionChart.options.scales?.x as TimeScaleOptions | undefined;
     if (xScale?.time) {
@@ -165,7 +158,7 @@ function setupChartInteractions(): void {
 
   btnYear?.addEventListener('change', () => {
     if (!evolutionChart) return;
-    evolutionChart.data.datasets[0].data = generateChartData(currentTotalUsers, 'year');
+    evolutionChart.data.datasets[0].data = generateChartData(currentAuditLogs, 'year');
 
     const xScale = evolutionChart.options.scales?.x as TimeScaleOptions | undefined;
     if (xScale?.time) {
@@ -186,6 +179,7 @@ async function loadMetrics() {
 
   
   void users;
+  currentAuditLogs = logs;
   const totalUsers = roles.reduce((sum, r) => sum + r.usersCount, 0);
   document.getElementById('metric-total-users')!.textContent = totalUsers.toLocaleString('en-US');
 
@@ -198,7 +192,8 @@ async function loadMetrics() {
   const recentChanges = logs.filter((log) => new Date(log.timestamp).getTime() >= since).length;
   document.getElementById('metric-recent-changes')!.textContent = String(recentChanges || logs.length);
 
-  initChart(totalUsers);
+  initChart(logs);
+    initChart(logs);
   setupChartInteractions();
 }
 

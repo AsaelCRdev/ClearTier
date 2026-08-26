@@ -4,7 +4,6 @@ import com.clearTier.backend.dto.request.RolRequestDTO;
 import com.clearTier.backend.dto.client.RolResponseDTO;
 import com.clearTier.backend.services.RolService;
 import jakarta.validation.Valid;
-import com.clearTier.backend.utils.CaptureAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4200"})
 public class RolController {
     //Inyección de dependencia
     private final RolService rolService;
@@ -24,11 +23,6 @@ public class RolController {
 
     //Crear rol
     @PostMapping("/role")
-    @CaptureAction(
-        action = "CREATE_ROLE", 
-        targetType = "ROLE", 
-        targetIdSpEL = "#newRol.id"
-    )
     public ResponseEntity<?> CrearRol(@Valid @RequestBody RolRequestDTO rolRequestDTO) {
         try{
             RolResponseDTO newRol = rolService.createRol(rolRequestDTO);

@@ -1,0 +1,1 @@
+function e(e){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}function t(e){return e.trim().length>=3&&e.trim().length<=20}export{t as n,e as t};

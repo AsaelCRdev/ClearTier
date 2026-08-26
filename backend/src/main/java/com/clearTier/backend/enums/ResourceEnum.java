@@ -9,13 +9,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ResourceEnum {
-    DASHBOARD("dashboard"),
-    USERS("users"),
-    ROLES("roles"),
-    SETTINGS("settings"),
-    AUDIT_LOGS("audit_logs"),;
+    DASHBOARD("dashboard", "Panel principal del sistema"),
+    USERS("users", "Gestión de usuarios"),
+    ROLES("roles", "Gestión de roles y permisos"),
+    SETTINGS("settings", "Configuración del sistema"),
+    AUDIT_LOGS("audit_logs", "Registro de auditoría"),;
 
     private final String value;
+    private final String description;
 
     @JsonCreator
     public static ResourceEnum fromValue(String value) {

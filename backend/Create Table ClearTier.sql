@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS public.roles
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     name character varying COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default" NOT NULL,
-    is_system_role character varying COLLATE pg_catalog."default" NOT NULL,
+    is_system_role boolean NOT NULL DEFAULT false,
     CONSTRAINT roles_pkey PRIMARY KEY (id),
     CONSTRAINT roles_name_key UNIQUE (name)
 );

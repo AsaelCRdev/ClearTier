@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @Builder
@@ -24,13 +27,21 @@ public class RolEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "isSystemRol")
+    @Column(name = "is_system_role", nullable = false)
     private Boolean isSystemRol;
+
+    @OneToMany(
+            mappedBy = "rol",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<RolePermissionEntity> permissions = new ArrayList<>();
 
 }

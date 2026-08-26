@@ -1,8 +1,6 @@
 package com.clearTier.backend.entities;
 
 import com.clearTier.backend.enums.ActionEnum;
-import com.clearTier.backend.enums.ResourceEnum;
-import com.clearTier.backend.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,26 +13,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "PERMISSIONS")
-
-/*
-    Esta entidad la tiene que unir Adriangel
-    remplazando los Enum de prueba por
-    las clases correspondientes (Foreign Key).
- */
 public class PermissionsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_permissions")
     private Long id;
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RoleEnum rolePermissions;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "id_resource",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_resources")
+    )
+    private ResourceEntity resource;
 
-    @Column(name = "resource", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ResourceEnum resource;
-
-    @Column(name = "action")
+    @Column(name = "action", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private ActionEnum action;
+
+    @Transient
+    private String rol;
 }

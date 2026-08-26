@@ -18,8 +18,8 @@ public class ResourceMapper {
             return null;
         }else {
             return ResourceEntity.builder()
-                    .nameResource(resourceRequestDTORequestDTO.getNameResource())
-                    .descriptionResource(resourceRequestDTORequestDTO.getDescriptionResource())
+                    .name(resourceRequestDTORequestDTO.getNameResource())
+                    .description(resourceRequestDTORequestDTO.getDescriptionResource())
                     .build();
         }
     }
@@ -30,8 +30,8 @@ public class ResourceMapper {
             return null;
         }else {
             return ResourceResponseDTO.builder()
-                    .nameResource(rolEntity.getNameResource())
-                    .descriptionResource(rolEntity.getDescriptionResource())
+                    .nameResource(rolEntity.getName())
+                    .descriptionResource(rolEntity.getDescription())
                     .build();
         }
     }

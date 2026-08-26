@@ -3,6 +3,7 @@ package com.clearTier.backend.mappers;
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;
 import com.clearTier.backend.entities.PermissionsEntity;
+import com.clearTier.backend.dto.client.ResourceResponseDTO;
 import org.springframework.stereotype.Component;
 
 /*
@@ -20,9 +21,8 @@ public class PermissionsMapper {
         }else {
             return PermissionsEntity
                 .builder()
-                    .resource(permission.getResource())
+                    .rol(permission.getRol())
                     .action(permission.getAction())
-                    .rolePermissions(permission.getRol())
                     .build();
         }
     }
@@ -35,9 +35,12 @@ public class PermissionsMapper {
             return PermissionsResponseDTO
                     .builder()
                     .id(permission.getId())
+                    .rol(permission.getRol())
                     .action(permission.getAction())
-                    .resource(permission.getResource())
-                    .rol(permission.getRolePermissions())
+                        .resource(ResourceResponseDTO.builder()
+                            .nameResource(permission.getResource().getName())
+                            .descriptionResource(permission.getResource().getDescription())
+                            .build())
                     .build();
         }
     }

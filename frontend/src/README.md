@@ -3,7 +3,7 @@
 Frontend del "Asistente de Configuración de Permisos y Roles". Corre 100% en el navegador con un **mock backend en memoria** (ver `src/ts/api/mockBackend.ts`) — no necesitas Java, PostgreSQL ni una API key de Gemini para probarlo.
 
 ## Instalación (siguiendo las prácticas seguras de npm)
-
+Antes de ejecuta cualquier comando se debe estar en la direccion del directorio de la carpeta frontend para poder aplicarlos
 ```bash
 npm config set ignore-scripts true
 npm ci --ignore-scripts

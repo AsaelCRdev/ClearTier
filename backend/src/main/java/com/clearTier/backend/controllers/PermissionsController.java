@@ -3,8 +3,9 @@ package com.clearTier.backend.controllers;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.services.PermissionsService;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import jakarta.validation.Valid;
+import com.clearTier.backend.utils.CaptureAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,11 @@ public class PermissionsController {
     }
 
     @PostMapping("/permissions")
+    @CaptureAction(
+        action = "CREATE_PERMISSION", 
+        targetType = "PERMISSION", 
+        targetIdSpEL = "#nuevo.id"
+    )
     public ResponseEntity<?> crear(@Valid @RequestBody PermissionsRequestDTO permissionsRequestDTO) {
         try {
             PermissionsResponseDTO nuevo = permissionsService.createPermission(permissionsRequestDTO);

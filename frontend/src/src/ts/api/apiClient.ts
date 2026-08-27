@@ -1,3 +1,5 @@
+import { getSession } from '../auth/tokenStorage';
+
 /**
  * Simula la latencia de una petición de red real. Los demás módulos de
   `api/` la usan para que la UI muestre estados de carga de forma
@@ -16,10 +18,12 @@ export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? 'http
 /* Wrapper de fetch que centraliza: adjuntar el JWT, parsear JSON y 
   convertir respuestas de error HTTP en excepciones legibles.*/
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const session = getSession();
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(session ? { Authorization: session.token } : {}),
       ...options.headers,
     },
   });

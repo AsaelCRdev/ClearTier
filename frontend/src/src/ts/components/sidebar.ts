@@ -24,16 +24,23 @@ export function renderSidebar(containerId: string, activePage: PageKey): void {
     </a>`;
 
   container.innerHTML = `
-    <div class="sidebar-brand">
-      <i class="bi bi-shield-fill-check"></i>
-      <span>ClearTier</span>
-    </div>
-    <nav class="sidebar-nav">
-      ${NAV_ITEMS.map(renderItem).join('')}
-    </nav>
-    <div class="sidebar-section-label">INTELLIGENCE</div>
-    <nav class="sidebar-nav">
-      ${renderItem(AI_ITEM)}
-    </nav>
+    <details class="sidebar-menu">
+      <summary class="sidebar-menu-toggle">
+        <span class="sidebar-brand">
+          <i class="bi bi-shield-fill-check"></i>
+          <span>ClearTier</span>
+        </span>
+        <i class="bi bi-chevron-down sidebar-menu-chevron" aria-hidden="true"></i>
+      </summary>
+      <div class="sidebar-menu-content">
+        <nav class="sidebar-nav" aria-label="Main navigation">
+          ${NAV_ITEMS.map(renderItem).join('')}
+        </nav>
+        <div class="sidebar-section-label">INTELLIGENCE</div>
+        <nav class="sidebar-nav" aria-label="Intelligence navigation">
+          ${renderItem(AI_ITEM)}
+        </nav>
+      </div>
+    </details>
   `;
 }

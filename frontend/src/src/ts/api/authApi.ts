@@ -1,5 +1,4 @@
-import { delay } from './apiClient';
-import { dbFindUserByEmail } from './mockBackend';
+import { API_BASE_URL } from './apiClient';
 
 export interface LoginResult {
   token: string;
@@ -7,15 +6,30 @@ export interface LoginResult {
   roleName: string;
 }
 
-/* En el mock, "adminId" simplemente se compara contra el email del usuario y cualquier "securityToken" no vacío se acepta. 
-   Cuando exista el backend, esto se reemplaza por un POST a
-    /api/auth/login que devuelve un JWT real firmado por Spring Security.
- */
 export async function login(adminId: string, securityToken: string): Promise<LoginResult> {
-  if (!adminId.trim() || !securityToken.trim()) {
-    throw new Error('Admin ID y Security Token son obligatorios');
+  const username = adminId.trim();
+  const password = securityToken.trim();
+
+  if (!username || !password) {
+    throw new Error('Usuario y contraseña son obligatorios');
   }
-  const user = dbFindUserByEmail(adminId) ?? { fullName: 'Alice Smith', roleName: 'Super Admin' };
-  const fakeJwt = btoa(JSON.stringify({ sub: adminId, role: user.roleName, exp: Date.now() + 1000 * 60 * 60 }));
-  return delay({ token: fakeJwt, userFullName: user.fullName, roleName: user.roleName });
+
+  const token = `Basic ${btoa(`${username}:${password}`)}`;
+  const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    headers: { Authorization: token },
+  });
+
+  if (response.status === 401) {
+    throw new Error('Usuario o contraseña incorrectos');
+  }
+  if (!response.ok) {
+    throw new Error(`Error del servidor (${response.status})`);
+  }
+
+  const user = await response.json() as { username: string };
+  return {
+    token,
+    userFullName: user.username,
+    roleName: 'Super Admin',
+  };
 }

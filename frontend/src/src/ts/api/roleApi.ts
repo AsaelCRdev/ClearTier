@@ -12,9 +12,7 @@ export async function fetchRoles(): Promise<Role[]> {
   }));
 }
 
-/*Valida las reglas de negocio de la Historia "Crear rol" antes de tocar
-  el mock backend: nombre único y longitud entre 3 y 20 caracteres.
- */
+
 export async function createRole(input: CreateRoleInput): Promise<Role> {
   const name = input.name.trim();
   if (name.length < 3 || name.length > 20) {

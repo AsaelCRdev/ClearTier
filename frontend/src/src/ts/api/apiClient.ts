@@ -13,7 +13,7 @@ export function delay<T>(value: T, ms = 350): Promise<T> {
    por Vite  para no hardcodear la URL en el código.Todavía NO se usa en este esqueleto, 
    pero queda lista para el día que reemplaces mockBackend.ts por llamadas reales.
 */
-export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? 'http://localhost:8081/api';
+export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? 'http://localhost:8082/api';
 
 /* Wrapper de fetch que centraliza: adjuntar el JWT, parsear JSON y 
   convertir respuestas de error HTTP en excepciones legibles.*/

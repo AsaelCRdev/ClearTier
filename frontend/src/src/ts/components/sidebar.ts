@@ -24,7 +24,7 @@ export function renderSidebar(containerId: string, activePage: PageKey): void {
     </a>`;
 
   container.innerHTML = `
-    <details class="sidebar-menu">
+    <details class="sidebar-menu" open>
       <summary class="sidebar-menu-toggle">
         <span class="sidebar-brand">
           <i class="bi bi-shield-fill-check"></i>
@@ -43,4 +43,9 @@ export function renderSidebar(containerId: string, activePage: PageKey): void {
       </div>
     </details>
   `;
+
+  const menu = container.querySelector('.sidebar-menu') as HTMLDetailsElement | null;
+  if (menu) {
+    menu.open = window.matchMedia('(min-width: 768px)').matches;
+  }
 }

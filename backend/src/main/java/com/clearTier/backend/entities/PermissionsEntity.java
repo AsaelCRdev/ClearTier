@@ -1,6 +1,6 @@
 package com.clearTier.backend.entities;
 
-import com.clearTier.backend.enums.ActionEnum;
+import com.clearTier.backend.enums.PermissionStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +29,7 @@ public class PermissionsEntity {
 
     @Column(name = "action", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private ActionEnum action;
+    private PermissionStatusEnum action;
 
     @Transient
     private String rol;

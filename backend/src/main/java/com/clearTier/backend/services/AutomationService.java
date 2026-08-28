@@ -4,7 +4,6 @@ import com.clearTier.backend.contracts.IAiConversation;
 import com.clearTier.backend.contracts.IAutomation;
 import com.clearTier.backend.dto.client.AiChangeResponseDTO;
 import com.clearTier.backend.dto.request.AiChangeRequestDTO;
-import com.clearTier.backend.dto.request.ConfirmationRequestDTO;
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.dto.request.RolRequestDTO;
 import com.clearTier.backend.entities.AiChangeEntity;
@@ -80,7 +79,11 @@ public class AutomationService implements IAiConversation, IAutomation {
 
         }catch (Exception e) {
             logger.error("Error al generar contenido con Gemini", e);
-            throw new RuntimeException("Error al generar objeto: " + e.getMessage(), e);
+            Throwable cause = e;
+            while (cause.getCause() != null) {
+                cause = cause.getCause();
+            }
+            throw new RuntimeException("Gemini no pudo generar la respuesta: " + cause.getMessage(), e);
         }
     }
 
@@ -129,16 +132,9 @@ public class AutomationService implements IAiConversation, IAutomation {
 
     //Confirmación del segundo mensaje para guardar el objeto
     private boolean isSave(String message) {
-        return chatClient
-                .prompt()
-                .advisors(AdvisorParams.ENABLE_NATIVE_STRUCTURED_OUTPUT)
-                .user(automationUtil.saveConfirmationPrompt(message))
-                .call()
-                .entity(ConfirmationRequestDTO.class,
-                spec -> spec
-                        .useProviderStructuredOutput()
-                        .validateSchema())
-                .isSave();
+        String normalized = message == null ? "" : message.trim().toLowerCase();
+        return normalized.matches(".*\\b(si|sí|confirmar|confirmo|aceptar|acepto|guardar|guarda|crear|continuar)\\b.*")
+            && !normalized.matches(".*\\b(no|cancelar|cancela|rechazar|rechazo)\\b.*");
     }
 
     //SEGUNDA PETICIÓN: Usa el objeto del caché para crear
@@ -170,7 +166,7 @@ public class AutomationService implements IAiConversation, IAutomation {
             return "Se creó con éxito";
 
         } catch (Exception e) {
-            return "Error al crear: " + e.getMessage();
+            throw new RuntimeException("Error al crear: " + e.getMessage(), e);
         }
     }
 

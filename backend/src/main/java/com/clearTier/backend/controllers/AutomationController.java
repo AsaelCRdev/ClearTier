@@ -26,6 +26,9 @@ public class AutomationController {
         String message = request.getPromptText();
         try {
             Map<String, Object> response = automationService.processChatRequest(type, message, request);
+            if (response.containsKey("error")) {
+                return ResponseEntity.badRequest().body(response);
+            }
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(response);

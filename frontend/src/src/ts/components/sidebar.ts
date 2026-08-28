@@ -46,6 +46,12 @@ export function renderSidebar(containerId: string, activePage: PageKey): void {
 
   const menu = container.querySelector('.sidebar-menu') as HTMLDetailsElement | null;
   if (menu) {
-    menu.open = window.matchMedia('(min-width: 768px)').matches;
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const updateMenuState = (event: MediaQueryList | MediaQueryListEvent) => {
+      menu.open = event.matches;
+    };
+
+    updateMenuState(mediaQuery);
+    mediaQuery.addEventListener('change', updateMenuState);
   }
 }

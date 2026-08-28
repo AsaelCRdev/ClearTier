@@ -24,7 +24,7 @@ export async function fetchAiQuota() {
  * que le pega al endpoint de Spring AI + Gemini.
  * =========================================================================
  */
-export async function interpretPrompt(promptText: string): Promise<{ outOfScope: boolean; request?: AiChangeRequest }> {
+export async function interpretPrompt(promptText: string): Promise<{ outOfScope: boolean; request?: AiChangeRequest; type?: 'role' | 'permission' }> {
   if (promptText.length > MAX_PROMPT_LENGTH) {
     throw new Error(`La instrucción supera el máximo de ${MAX_PROMPT_LENGTH} caracteres`);
   }
@@ -35,7 +35,12 @@ export async function interpretPrompt(promptText: string): Promise<{ outOfScope:
     method: 'POST',
     body: JSON.stringify({ message: promptText }),
   });
-  if (!preview.preview) return { outOfScope: true };
+  if (typeof preview.error === 'string') {
+    throw new Error(preview.error);
+  }
+  if (!preview.preview) {
+    throw new Error(typeof preview.message === 'string' ? preview.message : 'La IA no devolvió una vista previa válida.');
+  }
 
   const draft = preview.preview as Record<string, unknown>;
   const items: AiChangeItem[] = type === 'role'
@@ -52,17 +57,20 @@ export async function interpretPrompt(promptText: string): Promise<{ outOfScope:
 
 export async function commitAiChanges(requestId: string): Promise<void> {
   void requestId;
-  await apiFetch(`/chat?type=${lastAiType}`, {
+  const response = await apiFetch<{ error?: string; result?: string }>(`/chat?type=${lastAiType}`, {
     method: 'POST',
     body: JSON.stringify({ message: 'si, confirmar' }),
   });
+  if (response.error) throw new Error(response.error);
+  if (response.result?.startsWith('Error')) throw new Error(response.result);
 }
 
 export async function discardAiChanges(requestId: string): Promise<void> {
   void requestId;
-  await apiFetch(`/chat?type=${lastAiType}`, {
+  const response = await apiFetch<{ error?: string; result?: string }>(`/chat?type=${lastAiType}`, {
     method: 'POST',
     body: JSON.stringify({ message: 'no, cancelar' }),
   });
+  if (response.error) throw new Error(response.error);
 }
 

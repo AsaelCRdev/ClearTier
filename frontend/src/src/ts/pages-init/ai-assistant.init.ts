@@ -63,8 +63,8 @@ function renderDiff(): void {
 async function refreshQuota(): Promise<void> {
   const { used, limit } = await fetchAiQuota();
   const pct = Math.min(100, Math.round((used / limit) * 100));
-  quotaFill.style.width = `${pct}%`;
-  quotaLabel.textContent = `${used}/${limit} today`;
+  if (quotaFill) quotaFill.style.width = `${pct}%`;
+  if (quotaLabel) quotaLabel.textContent = `${used}/${limit} today`;
 }
 
 promptForm.addEventListener('submit', async (event) => {
@@ -86,7 +86,8 @@ promptForm.addEventListener('submit', async (event) => {
       messages.push({ role: 'assistant', text: 'Lo siento, solo puedo ayudarte con configuración de roles, permisos y accesos del sistema. ¿Podrías reformular tu instrucción en esos términos?' });
     } else if (result.request) {
       currentDraft = result.request;
-      messages.push({ role: 'assistant', text: `He preparado un borrador de cambios a partir de tu instrucción. Revísalo en el panel "Proposed Changes" y confirma o descarta.` });
+      const changes = result.request.items.map((item) => item.label).join(', ');
+      messages.push({ role: 'assistant', text: `He preparado este borrador: ${changes}. Revísalo en "Proposed Changes" y confirma o descarta.` });
       renderDiff();
     }
     renderChat();
@@ -102,20 +103,34 @@ promptForm.addEventListener('submit', async (event) => {
 
 commitBtn.addEventListener('click', async () => {
   if (!currentDraft) return;
-  await commitAiChanges(currentDraft.id);
-  showToast('Cambios aplicados y registrados en auditoría', 'success');
-  messages.push({ role: 'assistant', text: 'Cambios aplicados correctamente. Quedaron registrados en el historial de auditoría.' });
-  currentDraft = null;
-  renderChat();
-  renderDiff();
+  commitBtn.disabled = true;
+  discardBtn.disabled = true;
+  try {
+    await commitAiChanges(currentDraft.id);
+    showToast('Cambios aplicados y registrados en auditoría', 'success');
+    messages.push({ role: 'assistant', text: 'Cambios aplicados correctamente. Quedaron registrados en el historial de auditoría.' });
+    currentDraft = null;
+    renderChat();
+    renderDiff();
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : 'No se pudieron aplicar los cambios', 'error');
+    renderDiff();
+  }
 });
 
 discardBtn.addEventListener('click', async () => {
   if (!currentDraft) return;
-  await discardAiChanges(currentDraft.id);
-  showToast('Cambios descartados', 'success');
-  currentDraft = null;
-  renderDiff();
+  commitBtn.disabled = true;
+  discardBtn.disabled = true;
+  try {
+    await discardAiChanges(currentDraft.id);
+    showToast('Cambios descartados', 'success');
+    currentDraft = null;
+    renderDiff();
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : 'No se pudieron descartar los cambios', 'error');
+    renderDiff();
+  }
 });
 
 renderChat();

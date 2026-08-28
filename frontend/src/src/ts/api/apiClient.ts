@@ -36,7 +36,14 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     throw new Error('Se alcanzó el límite diario de solicitudes a la IA. Intenta de nuevo mañana.');
   }
   if (!response.ok) {
-    throw new Error(`Error del servidor (${response.status})`);
+    let detail = '';
+    try {
+      const body = await response.json() as { error?: string; message?: string };
+      detail = body.error ?? body.message ?? '';
+    } catch {
+      // La respuesta puede no contener JSON.
+    }
+    throw new Error(detail || `Error del servidor (${response.status})`);
   }
   return response.json() as Promise<T>;
 }

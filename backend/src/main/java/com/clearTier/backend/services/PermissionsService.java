@@ -4,7 +4,7 @@ import com.clearTier.backend.contracts.IPermissionsService;
 import com.clearTier.backend.dto.request.PermissionsRequestDTO;
 import com.clearTier.backend.dto.client.PermissionsResponseDTO;
 import com.clearTier.backend.dto.client.PermissionMatrixCellDTO;
-import com.clearTier.backend.enums.ActionEnum;
+import com.clearTier.backend.enums.PermissionStatusEnum;
 import com.clearTier.backend.entities.PermissionsEntity;
 import com.clearTier.backend.entities.ResourceEntity;
 import com.clearTier.backend.entities.RolePermissionEntity;
@@ -86,10 +86,10 @@ public class PermissionsService implements IPermissionsService {
                 ResourceEntity resource = resourceRepository.findByName(resourceName)
                     .orElseThrow(() -> new IllegalArgumentException("El recurso no existe: " + resourceName));
                 PermissionsEntity permission = permissionsRepository
-                    .findByResource_NameAndAction(resourceName, ActionEnum.READ)
+                    .findByResource_NameAndAction(resourceName, PermissionStatusEnum.ALLOW)
                     .orElseGet(() -> permissionsRepository.save(PermissionsEntity.builder()
                         .resource(resource)
-                        .action(ActionEnum.READ)
+                        .action(PermissionStatusEnum.ALLOW)
                         .build()));
                 return RolePermissionEntity.builder()
                     .rol(role)

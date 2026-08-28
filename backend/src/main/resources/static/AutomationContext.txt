@@ -27,7 +27,7 @@
 
     si es permiso: {rol} existente de la base de datos
     al que se le dará el permiso, {resource} tiene que dar el nombre del recurso,
-    {action} debe ingresar la accion a ejecutar, si el
+    {action} debe indicar el estado del permiso (allow, deny o --), si el
     cliente solo da un dato entonces tienes todo el derecho
     de interpretar los demás datos que falten que tenga sentido
     en el ambiente laboral de la empresa.
@@ -44,7 +44,7 @@
     {
         "rol": "manager",
         "resource": "nombre_del_recurso",
-        "action": "nombre_de_la_accion"
+        "action": "allow"
     }
 
 [EJEMPLOS]
@@ -59,7 +59,7 @@
     {
         "rol": "manager",
         "resource": "usuarios",
-        "action": "editar"
+        "action": "allow"
     }
 [RESTRICCIONES]
     - SOLO devuelve el JSON, sin texto adicional.

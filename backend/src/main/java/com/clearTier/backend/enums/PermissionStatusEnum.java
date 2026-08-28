@@ -17,12 +17,12 @@ public enum PermissionStatusEnum {
 
     @JsonCreator
     public static PermissionStatusEnum fromValue(String value) {
-        for (PermissionStatusEnum action : PermissionStatusEnum.values()) {
-            if (action.getValue().equalsIgnoreCase(value)) {
-                return action;
+        for (PermissionStatusEnum status : PermissionStatusEnum.values()) {
+            if (status.getValue().equalsIgnoreCase(value)) {
+                return status;
             }
         }
-        throw new IllegalArgumentException("Acción inválida: " + value);
+        throw new IllegalArgumentException("Estado de permiso inválido: " + value);
     }
 
     @JsonValue

@@ -77,13 +77,15 @@ function renderTable(): void {
       const resourceId = btn.dataset.resourceId!;
       try {
         const newEffect = await toggleCell(roleId, resourceId);
-      // Actualiza solo esa celda en memoria y su botón en el DOM — evita
-      // volver a pedir toda la matriz al servidor por un solo clic.
-      const cell = matrix.find((c) => c.roleId === roleId && c.resourceId === resourceId)!;
-      cell.effect = newEffect;
-      btn.textContent = newEffect;
-      btn.className = `matrix-cell-btn ${effectClass(newEffect)}`;
-      showToast(`Permiso actualizado a ${newEffect}`, 'success');
+        const cell = matrix.find((c) => c.roleId === roleId && c.resourceId === resourceId);
+        if (cell) {
+          cell.effect = newEffect;
+        } else {
+          matrix.push({ roleId, resourceId, effect: newEffect });
+        }
+        btn.textContent = newEffect;
+        btn.className = `matrix-cell-btn ${effectClass(newEffect)}`;
+        showToast(`Permiso actualizado a ${newEffect}`, 'success');
       } catch (error) {
         showToast(error instanceof Error ? error.message : 'No se pudo actualizar el permiso', 'error');
       }

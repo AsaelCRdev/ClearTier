@@ -1,6 +1,6 @@
 package com.clearTier.backend.dto.request;
 
-import com.clearTier.backend.enums.ActionEnum;
+import com.clearTier.backend.enums.PermissionStatusEnum;
 import com.clearTier.backend.enums.ResourceEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,5 +28,5 @@ public class PermissionsRequestDTO {
     private ResourceEnum resource;
 
     @NotNull(message = "Debe ingresar la acción a ejecutar")
-    private ActionEnum action;
+    private PermissionStatusEnum action;
 }

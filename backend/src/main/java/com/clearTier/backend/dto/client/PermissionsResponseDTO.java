@@ -1,6 +1,6 @@
 package com.clearTier.backend.dto.client;
 
-import com.clearTier.backend.enums.ActionEnum;
+import com.clearTier.backend.enums.PermissionStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class PermissionsResponseDTO {
     private Long id;
     private String rol;
     private ResourceResponseDTO resource;
-    private ActionEnum action;
+    private PermissionStatusEnum action;
 
 }
